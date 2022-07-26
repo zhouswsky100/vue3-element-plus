@@ -17,7 +17,7 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
         server: {
             proxy: {
                 '/api': {
-                  target: 'https://bs2.farm.vpclub.cn/biosafe',
+                  target: 'https://github.com/biosafe',
                   changeOrigin: true,
                   rewrite: (path) => path.replace(/^\/api/, '/api')
                 }
