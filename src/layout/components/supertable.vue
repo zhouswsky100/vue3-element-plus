@@ -6,6 +6,7 @@
     <el-button type="text" @click=";(colsFlag = true), (colsType = 2)">
       排序列
     </el-button>
+    <slot />
     <el-table :data="tableList" border style="width: 100%">
       <template v-for="(item, index) in tabList" :key="index">
         <el-table-column
@@ -43,6 +44,16 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination
+      class="pagination"
+      :current-page="currentPage"
+      :page-sizes="[10, 20, 50, 100]"
+      :page-size="pageSize"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="total"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+    />
     <el-dialog
       :title="colsType == 1 ? '筛选列' : '排序列'"
       v-model="colsFlag"
@@ -92,6 +103,18 @@ const checkList = ref([])
 const treeData = ref([])
 const props = defineProps({
   tableData: Object,
+  currentPage: {
+    type: Number,
+    default: 1,
+  },
+  pageSize: {
+    type: Number,
+    default: 10,
+  },
+  total: {
+    type: Number,
+    default: 0,
+  },
 })
 const tableList: Array = computed(() => {
   return props.tableData.tableList
@@ -141,4 +164,15 @@ const allowDrop = (draggingNode: any, dropNode: any, type: any) => {
 const allowDrag = (draggingNode: any) => {
   return -1
 }
+const handleCurrentChange = (val) => {
+  emit('handleCurrentChange', val)
+}
+const handleSizeChange = (val) => {
+  emit('handleSizeChange', val)
+}
 </script>
+<style scoped>
+.pagination {
+  margin: 20px 0;
+}
+</style>

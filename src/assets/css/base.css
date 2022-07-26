@@ -9,6 +9,9 @@
 /*
    margin 开始
 */
+.m20{
+    margin: 1.25rem;
+}
 .mt-5{
     margin-top: .3125rem;
 }
