@@ -1,0 +1,42 @@
+.flex{
+    display: flex;
+}
+.flex-c-c{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+/*
+   margin 开始
+*/
+.mt-5{
+    margin-top: .3125rem;
+}
+.mt-20{
+    margin-top: 1.25rem;
+}
+.mr-10{
+    margin-right: .625rem;
+}
+/*
+ 工具
+*/
+.hand{
+    cursor: pointer;  
+}
+.z-100{
+    z-index: 100;
+}
+.z-1{
+    z-index: 9;
+}
+.g-cf:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+.g-cf {
+    zoom: 1;
+}
