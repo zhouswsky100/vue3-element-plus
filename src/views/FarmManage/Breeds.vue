@@ -49,12 +49,13 @@
       <el-button type="text" @click="homeFlag = true"> 新增栏舍 </el-button>
     </Supertable>
     <el-dialog
-      title="新增栏舍"
+      :title="addType == 1 ? '新增栏舍' : '新增养殖模式'"
       v-model="homeFlag"
       width="30%"
       :before-close="handleClose"
     >
       <el-form
+        v-show="addType == 1"
         :model="form"
         class="add"
         label-position="right"
@@ -85,7 +86,7 @@
             },
           ]"
         >
-          <el-select v-model="form.state">
+          <el-select v-model="form.state" clearable>
             <el-option>空栏</el-option>
             <el-option>在养</el-option>
           </el-select>
@@ -141,6 +142,72 @@
           </el-row>
         </el-form-item>
       </el-form>
+      <el-form
+        v-show="addType == 2"
+        :model="form2"
+        class="add"
+        label-position="right"
+        label-width="8rem"
+        ref="breedForm2"
+      >
+        <el-form-item label="所属养殖场">
+             <span>测试养殖场</span>
+        </el-form-item>
+        <el-form-item
+          label="养殖模式编号"
+          prop="name"
+          :rules="[
+            {
+              required: true,
+              message: '请输入养殖模式编号',
+              trigger: 'blur',
+            },
+          ]"
+        >
+          <el-input v-model="form2.name" placeholder="请输入养殖模式编号" />
+        </el-form-item>
+        <el-form-item
+          label="养殖模式名称"
+          prop="state"
+          :rules="[
+            {
+              required: true,
+              message: '请输入养殖模式名称',
+              trigger: 'blur',
+            },
+          ]"
+        >
+          <el-input v-model="form2.name" placeholder="请输入养殖模式编号" />
+        </el-form-item>
+        <el-form-item
+          prop="type"
+          label="养殖模式状态"
+          :rules="[
+            {
+              required: true,
+              message: '请选择养殖模式状态',
+              trigger: 'blur',
+            },
+          ]"
+        >
+          <el-select v-model="form2.type" clearable>
+            <el-option>空栏</el-option>
+            <el-option>在养</el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="绑定栏舍" placeholder="请输入存栏数">
+          <el-select v-model="form2.structure">
+            <el-option>地养</el-option>
+            <el-option>在养</el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="姓名">
+          <el-input v-model="form2.name" placeholder="请输入姓名" />
+        </el-form-item>
+        <el-form-item label="手机号">
+          <el-input v-model="form2.phone" placeholder="请输入手机号" />
+        </el-form-item>
+      </el-form>
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="homeFlag = false" size="mini">取 消</el-button>
@@ -150,22 +217,88 @@
         </span>
       </template>
     </el-dialog>
-    <div class="detail hand" v-show="detailFLag" >
-      <div class="m20" @click="detailFLag = false">
+    <div class="detail hand" v-show="detailFLag">
+      <div class="m10" @click="detailFLag = false">
         <el-icon>
           <el-icon-arrow-left />
         </el-icon>
         <span> 测试栏舍</span>
       </div>
       <el-tabs tab-position="left">
-        <el-tab-pane label="信息总览">11</el-tab-pane>
-        <el-tab-pane label="环境数据">1</el-tab-pane>
-        <el-tab-pane label="用电量">1</el-tab-pane>
-        <el-tab-pane label="用水量">1</el-tab-pane>
-        <el-tab-pane label="设备列表">1</el-tab-pane>
-        <el-tab-pane label="栏舍日志">1</el-tab-pane>
-        <el-tab-pane label="告警事件">1</el-tab-pane>
-        <el-tab-pane label="阈值管理">1</el-tab-pane>
+        <el-tab-pane label="信息总览">
+          <el-card class="box-card">
+            <template #header>
+              <div class="card-header">
+                <span>养殖场信息</span>
+              </div>
+            </template>
+            <div v-for="o in 4" :key="o" class="text item">
+              {{ 'List item ' + o }}
+            </div>
+          </el-card>
+          <el-card class="box-card mt-5">
+            <template #header>
+              <div class="card-header">
+                <span>组织信息</span>
+              </div>
+            </template>
+            <div v-for="o in 4" :key="o" class="text item">
+              {{ 'List item ' + o }}
+            </div>
+          </el-card>
+        </el-tab-pane>
+        <el-tab-pane label="养殖模式列表">
+          <el-form :inline="true" :model="query">
+            <el-form-item label="养殖模式">
+              <el-select-v2
+                v-model="query.farm"
+                filterable
+                :options="farmList"
+                placeholder="请选择养殖模式名称"
+                style="width: 240px"
+              />
+            </el-form-item>
+            <el-form-item label="养殖模式状态">
+              <el-select v-model="form.state">
+                <el-option>开户</el-option>
+                <el-option>申请</el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="onSubmit">查询</el-button>
+              <el-button type="info" @click="onSubmit">重置</el-button>
+            </el-form-item>
+          </el-form>
+          <Supertable
+            :tableData="tableData"
+            @handleClick="handleClick"
+            @handleCurrentChange="handleCurrentChange"
+            @handleSizeChange="handleSizeChange"
+            :total="total"
+          >
+            <el-button type="text" @click="homeFlag = true;addType = 2" >新增养殖模式</el-button>
+          </Supertable>
+        </el-tab-pane>
+        <el-tab-pane label="批次号列表">
+          <Batchexcel/>
+        </el-tab-pane>
+        <el-tab-pane label="养殖场日志">
+           <el-table :data="logTable" height="250" style="width: 100%">
+            <el-table-column prop="date" label="备注"  />
+            <el-table-column prop="name" label="来源"  />
+            <el-table-column prop="name" label="操作人"  />
+            <el-table-column prop="name" label="操作时间"  />
+          </el-table>
+        </el-tab-pane>
+        <el-tab-pane label="告警事件">
+          <Waringexcel/>
+        </el-tab-pane>
+        <el-tab-pane label="告警通知">
+          <Waringnotice/>
+        </el-tab-pane>
+        <el-tab-pane label="告警订阅">
+          <Waringsub/>
+        </el-tab-pane>
       </el-tabs>
     </div>
   </div>
@@ -175,8 +308,15 @@
 import { reactive, ref } from 'vue'
 import { ElNotification } from 'element-plus'
 import Supertable from '/@/layout/components/supertable.vue'
+import Batchexcel from '/@/views/FarmManage/components/batchexcel.vue'
+import Waringexcel from '/@/views/FarmManage/components/waringexcel.vue'
+import Waringnotice from '/@/views/FarmManage/components/waringnotice.vue'
+import Waringsub from '/@/views/FarmManage/components/waringsub.vue'
+
+import { breedCols } from '/@/config/table'
 
 const breedForm = ref()
+const breedForm2 = ref()
 const form = reactive({
   name: '',
   state: '',
@@ -187,6 +327,18 @@ const form = reactive({
   height: '',
   long: '',
 })
+const form2 = reactive({
+  name: '',
+  state: '',
+  fencen: '',
+  structure: '',
+  number: '',
+  width: '',
+  height: '',
+  long: '',
+})
+const addType = ref(1)
+const logTable =ref([])
 const total = ref(1)
 const tableData = reactive({
   tableList: [
@@ -198,69 +350,7 @@ const tableData = reactive({
       projName: '001',
     },
   ],
-  tabList: [
-    {
-      key: 'date',
-      value: '养殖场',
-      id: 1,
-      hideen: false,
-    },
-    {
-      key: 'date',
-      value: '栏舍',
-      id: 2,
-      hideen: false,
-    },
-    {
-      key: 'date',
-      value: '养殖类型',
-      id: 3,
-      hideen: false,
-    },
-    {
-      key: 'date',
-      value: '负责人',
-      id: 4,
-      hideen: false,
-    },
-    {
-      key: 'date',
-      value: '负责人手机号',
-      id: 5,
-      hideen: false,
-      sort: true,
-    },
-    {
-      key: 'date',
-      value: '技术员',
-      id: 6,
-      hideen: false,
-    },
-    {
-      key: 'date',
-      value: '技术员手机号',
-      id: 7,
-      hideen: false,
-    },
-    {
-      key: 'date',
-      value: '数据来源',
-      id: 8,
-      hideen: false,
-    },
-    {
-      key: 'date',
-      value: '修改人',
-      id: 9,
-      hideen: false,
-    },
-    {
-      key: 'date',
-      value: '修改时间',
-      id: 10,
-      hideen: false,
-    },
-  ],
+  tabList: breedCols
 })
 const farmList = ref([])
 const groupList = ref([])
@@ -307,18 +397,33 @@ const onSubmit = () => {
   console.log('开始查询了')
 }
 const saveFence = () => {
-  breedForm.value.validate((valid) => {
-    if (valid) {
-      ElNotification({
-        title: '新增',
-        message: '新增栏舍成功了',
-        type: 'success',
+  if(addType.value == 1){
+      breedForm.value.validate((valid) => {
+        if (valid) {
+          ElNotification({
+            title: '新增',
+            message: '新增栏舍成功了',
+            type: 'success',
+          })
+        } else {
+          console.log('error submit!')
+          return false
+        }
       })
-    } else {
-      console.log('error submit!')
-      return false
-    }
-  })
+  }else{
+     breedForm2.value.validate((valid) => {
+        if (valid) {
+          ElNotification({
+            title: '新增',
+            message: '新增养殖模式成功了',
+            type: 'success',
+          })
+        } else {
+          console.log('error submit!')
+          return false
+        }
+      })
+  }
 }
 </script>
 <style scoped>

@@ -29,12 +29,6 @@
         <el-form-item label="栏舍名称">
           <el-input v-model="query.name" placeholder="请输入栏舍名称" />
         </el-form-item>
-        <el-form-item label="绑定设备">
-          <el-select v-model="query.device">
-            <el-option>绑定</el-option>
-            <el-option>未绑定</el-option>
-          </el-select>
-        </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit">查询</el-button>
           <el-button type="info" @click="onSubmit">重置</el-button>
@@ -88,7 +82,7 @@
             },
           ]"
         >
-          <el-select v-model="form.state">
+          <el-select v-model="form.state" clearable>
             <el-option>空栏</el-option>
             <el-option>在养</el-option>
           </el-select>
@@ -161,14 +155,63 @@
         <span> 测试栏舍</span>
       </div>
       <el-tabs tab-position="left">
-        <el-tab-pane label="信息总览">11</el-tab-pane>
-        <el-tab-pane label="环境数据">1</el-tab-pane>
-        <el-tab-pane label="用电量">1</el-tab-pane>
-        <el-tab-pane label="用水量">1</el-tab-pane>
-        <el-tab-pane label="设备列表">1</el-tab-pane>
-        <el-tab-pane label="栏舍日志">1</el-tab-pane>
-        <el-tab-pane label="告警事件">1</el-tab-pane>
-        <el-tab-pane label="阈值管理">1</el-tab-pane>
+        <el-tab-pane label="信息总览">
+          <el-card class="box-card">
+            <template #header>
+              <div class="card-header">
+                <span>养殖场信息</span>
+              </div>
+            </template>
+            <div v-for="o in 4" :key="o" class="text item">
+              {{ 'List item ' + o }}
+            </div>
+          </el-card>
+          <el-card class="box-card mt-5">
+            <template #header>
+              <div class="card-header">
+                <span>组织信息</span>
+              </div>
+            </template>
+            <div v-for="o in 4" :key="o" class="text item">
+              {{ 'List item ' + o }}
+            </div>
+          </el-card>
+        </el-tab-pane>
+        <el-tab-pane label="环境数据">
+          待完成
+        </el-tab-pane>
+        <el-tab-pane label="用电量">
+           <el-table :data="logTable" height="250" style="width: 100%">
+            <el-table-column prop="date" label="存栏量"  />
+            <el-table-column prop="name" label="单只用量"  />
+            <el-table-column prop="name" label="单价"  />
+            <el-table-column prop="name" label="总价"  />
+            <el-table-column prop="name" label="创建时间"  />
+          </el-table>
+        </el-tab-pane>
+        <el-tab-pane label="用水量">
+          <el-table :data="logTable" height="250" style="width: 100%">
+            <el-table-column prop="date" label="存栏量"  />
+            <el-table-column prop="name" label="单只用量"  />
+            <el-table-column prop="name" label="单价"  />
+            <el-table-column prop="name" label="总价"  />
+            <el-table-column prop="name" label="创建时间"  />
+          </el-table>
+        </el-tab-pane>
+        <el-tab-pane label="栏舍日志">
+          <el-table :data="logTable" height="250" style="width: 100%">
+            <el-table-column prop="date" label="备注"  />
+            <el-table-column prop="name" label="来源"  />
+            <el-table-column prop="name" label="操作人"  />
+            <el-table-column prop="name" label="时间"  />
+          </el-table>
+        </el-tab-pane>
+        <el-tab-pane label="告警事件">
+          <Waringnotice/>
+        </el-tab-pane>
+        <el-tab-pane label="阈值管理">
+          待完成
+        </el-tab-pane>
       </el-tabs>
     </div>
   </div>
@@ -178,6 +221,8 @@
 import { reactive, ref } from 'vue'
 import { ElNotification } from 'element-plus'
 import Supertable from '/@/layout/components/supertable.vue'
+import { fencesCols } from '/@/config/table'
+import Waringnotice from '/@/views/FarmManage/components/waringnotice.vue'
 
 const breedForm = ref()
 const form = reactive({
@@ -201,69 +246,7 @@ const tableData = reactive({
       projName: '001',
     },
   ],
-  tabList: [
-    {
-      key: 'date',
-      value: '养殖场',
-      id: 1,
-      hideen: false,
-    },
-    {
-      key: 'date',
-      value: '栏舍',
-      id: 2,
-      hideen: false,
-    },
-    {
-      key: 'date',
-      value: '养殖类型',
-      id: 3,
-      hideen: false,
-    },
-    {
-      key: 'date',
-      value: '负责人',
-      id: 4,
-      hideen: false,
-    },
-    {
-      key: 'date',
-      value: '负责人手机号',
-      id: 5,
-      hideen: false,
-      sort: true,
-    },
-    {
-      key: 'date',
-      value: '技术员',
-      id: 6,
-      hideen: false,
-    },
-    {
-      key: 'date',
-      value: '技术员手机号',
-      id: 7,
-      hideen: false,
-    },
-    {
-      key: 'date',
-      value: '数据来源',
-      id: 8,
-      hideen: false,
-    },
-    {
-      key: 'date',
-      value: '修改人',
-      id: 9,
-      hideen: false,
-    },
-    {
-      key: 'date',
-      value: '修改时间',
-      id: 10,
-      hideen: false,
-    },
-  ],
+  tabList: fencesCols
 })
 const farmList = ref([])
 const groupList = ref([])
