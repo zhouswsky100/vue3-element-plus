@@ -17,8 +17,8 @@
           :sortable="item.sort"
         />
       </template>
-      <el-table-column fixed="right" label="操作">
-        <template #default="scope">
+      <el-table-column fixed="right" label="操作" width="130" v-if="needFun">
+        <template #default="scope" >
           <el-button
             type="text"
             size="small"
@@ -28,6 +28,7 @@
           </el-button>
           <el-button
             type="text"
+            v-if="needEdit"
             size="small"
             @click="handleClick({ id: scope.row.id, type: 2 })"
           >
@@ -35,6 +36,7 @@
           </el-button>
           <el-button
             type="text"
+            v-if="needDel"
             class="danger"
             size="small"
             @click="handleClick({ id: scope.row.id, type: 3 })"
@@ -110,6 +112,18 @@ const props = defineProps({
   pageSize: {
     type: Number,
     default: 10,
+  },
+  needFun: {
+    type: Boolean,
+    default: true,
+  },
+  needEdit: {
+    type: Boolean,
+    default: true,
+  },
+  needDel: {
+    type: Boolean,
+    default: true,
   },
   total: {
     type: Number,
