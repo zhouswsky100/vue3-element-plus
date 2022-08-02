@@ -20,21 +20,21 @@ export default defineComponent ({
     },
     setup() {
         changeThemeDefaultColor()
-        const { getSetting } = useLayoutStore()
-
+        const { getSetting,getFontSetting } = useLayoutStore()
         // 重新获取主题色
         const f = () => {
             let themeArray = theme()
             return getSetting.theme >= themeArray.length ? themeArray[0] : themeArray[getSetting.theme]
         }
-
+        const fontSize =  ref( getFontSetting.size+'px')
         let themeStyle:Ref<ITheme> = ref(f())
         watch(() => getSetting.theme, () => themeStyle.value = f())
         watch(() => getSetting.color.primary, () => themeStyle.value = f())
-
+        watch(() => getFontSetting.size ,()=> fontSize.value = getFontSetting.size+'px')
         return {
             locale,
             themeStyle,
+            fontSize,
             getSetting
         }
     }
@@ -170,5 +170,27 @@ export default defineComponent ({
         .el-menu-item-group__title {
             padding: 0;
         }
+    }
+    .el-sub-menu__title *{
+        font-size: v-bind(fontSize);
+    }
+    .el-sub-menu .el-menu-item{
+        font-size: v-bind(fontSize);
+    }
+    .el-breadcrumb__item{
+        font-size: v-bind(fontSize);
+    }
+    .router-link-active{
+        font-size: v-bind(fontSize);
+    }
+    
+    .el-button--text *{
+        font-size: v-bind(fontSize);
+    }
+    .cell{
+        font-size: v-bind(fontSize);
+    }
+    .custom-tree-node{
+        font-size: v-bind(fontSize);
     }
 </style>

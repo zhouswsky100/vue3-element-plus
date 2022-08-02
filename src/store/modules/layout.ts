@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { login,getUser } from '/@/api/layout/index'
 import { LoginParam } from '/@/type/store/layout'
-import { ILayout, IMenubarStatus, ITagsList, IMenubarList, ISetting, IMenubar, IStatus, ITags, IUserInfo,IDeptInfo } from '/@/type/store/layout'
+import { ILayout, IMenubarStatus, ITagsList, IMenubarList, ISetting, IMenubar, IStatus, ITags, IUserInfo,IDeptInfo,FStyle} from '/@/type/store/layout'
 import router from '/@/router/index'
 import { allowRouter } from '/@/router/index'
 import { generatorDynamicRouter } from '/@/router/asyncRouter'
@@ -10,6 +10,8 @@ import { RouteLocationNormalizedLoaded } from 'vue-router'
 
 const setting = getLocal<ISetting>('setting')
 const deptInfo = getLocal<IDeptInfo>('deptInfo')
+const fontSetting = getLocal<FStyle>('fontSetting')
+
 
 const { ACCESS_TOKEN } = getLocal<IStatus>('token')
 
@@ -25,6 +27,9 @@ export const useLayoutStore = defineStore({
         userInfo: {
             name: '',
             role: []
+        },
+        fontSetting:{
+            size:fontSetting.size || 12
         },
         //组织信息
         deptInfo: {
@@ -69,6 +74,9 @@ export const useLayoutStore = defineStore({
         },
         getStatus():IStatus {
             return this.status
+        },
+        getFontSetting():FStyle {
+            return this.fontSetting
         }
     },
     actions: {
@@ -213,6 +221,11 @@ export const useLayoutStore = defineStore({
             this.deptInfo.deptId = deptId
             this.deptInfo.deptName = deptName
             localStorage.setItem('deptInfo', JSON.stringify(this.deptInfo))
+        },
+        changeFontSize(size: number,style:string):void {
+            this.fontSetting.size = size
+            this.fontSetting.style = style
+            localStorage.setItem('fontSetting', JSON.stringify(this.fontSetting))
         },
         // 下次进去该页面刷新该页面(解决子页面保存之后，回到父页面页面不刷新问题)
         refreshPage(path: string):void {

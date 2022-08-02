@@ -75,6 +75,10 @@
                     <div>主题色</div>
                     <layout-theme />
                 </div>
+                <div class='flex justify-between items-center py-1'>
+                    <div>字体</div>
+                    <layout-font />
+                </div>
             </div>
         </div>
     </el-drawer>
@@ -85,6 +89,7 @@ import { ref,watch } from 'vue'
 import theme from '/@/config/theme'
 import { useLayoutStore } from '/@/store/modules/layout'
 import LayoutTheme from '/@/layout/components/theme.vue'
+import LayoutFont from '/@/layout/components/font.vue'
 
 const { changeTheme, getSetting, changeTagsSetting, changePinSearchSetting, changemenubarMode } = useLayoutStore()
 const drawer = ref(false)
