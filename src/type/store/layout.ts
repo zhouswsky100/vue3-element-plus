@@ -21,6 +21,7 @@ export interface LoginParam {
     password: string
 }
 export interface IgetuserRes {
+    buttonMenus: string[]
     name: string
     role: Array<string>
 }
@@ -31,7 +32,8 @@ export interface IMenubar {
 }
 export interface IUserInfo {
     name: string,
-    role: string[]
+    role: string[],
+    buttonMenus:string[],
 }
 export interface IDeptInfo {
     deptId?: number,
@@ -46,6 +48,10 @@ export interface IStatus {
     isLoading: boolean
     ACCESS_TOKEN: string
 }
+export interface FStyle {
+    size: number
+    style?: string
+}
 export interface ILayout {
     // 左侧导航栏
     menubar: IMenubar
@@ -55,7 +61,8 @@ export interface ILayout {
     // 标签栏
     tags: ITags
     setting: ISetting
-    status:IStatus
+    status:IStatus,
+    fontSetting:FStyle,
 }
 export interface IMenubarList {
     parentId?: number | string

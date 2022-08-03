@@ -11,8 +11,6 @@ import { RouteLocationNormalizedLoaded } from 'vue-router'
 const setting = getLocal<ISetting>('setting')
 const deptInfo = getLocal<IDeptInfo>('deptInfo')
 const fontSetting = getLocal<FStyle>('fontSetting')
-
-
 const { ACCESS_TOKEN } = getLocal<IStatus>('token')
 
 export const useLayoutStore = defineStore({
@@ -26,7 +24,8 @@ export const useLayoutStore = defineStore({
         // 用户信息
         userInfo: {
             name: '',
-            role: []
+            role: [],
+            buttonMenus:[]
         },
         fontSetting:{
             size:fontSetting.size || 12
@@ -249,9 +248,10 @@ export const useLayoutStore = defineStore({
         },
         async getUser():Promise<void> {
             const res = await getUser()
-            const userInfo = res.data.Data
+            const userInfo = res.data.data
             this.userInfo.name = userInfo.name
             this.userInfo.role = userInfo.role
+            this.userInfo.role = userInfo.buttonMenus
         },
         // async GenerateRoutes():Promise<void> {
         //     const res = await getRouterList()
