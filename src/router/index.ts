@@ -15,19 +15,19 @@ export const allowRouter:Array<IMenubarList> = [
         path: '/',
         component: Components['Layout'],
         redirect: '/FarmManage/breed',
-        meta: { title: '猪场管理服务', icon: 'el-icon-eleme' },
+        meta: { title: 'test', icon: 'el-icon-eleme' },
         children: [
             {
                 name: 'Breeds',
                 path: '/FarmManage/breed',
                 component: Components['Breeds'],
-                meta: { title: '养殖场管理', icon: 'el-icon-tools' }
+                meta: { title: 'test', icon: 'el-icon-tools' }
             },
             {
                 name: 'Fences',
                 path: '/FarmManage/fences',
                 component: Components['Fences'],
-                meta: { title: '栏舍管理', icon: 'el-icon-tools' }
+                meta: { title: 'test', icon: 'el-icon-tools' }
             },
         ]
     },
