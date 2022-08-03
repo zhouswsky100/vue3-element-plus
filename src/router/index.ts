@@ -29,12 +29,6 @@ export const allowRouter:Array<IMenubarList> = [
                 component: Components['Fences'],
                 meta: { title: '栏舍管理', icon: 'el-icon-tools' }
             },
-            {
-                name: 'test',
-                path: '/FarmManage/test',
-                component: Components['test'],
-                meta: { title: '栏舍管理', icon: 'el-icon-tools' }
-            }
         ]
     },
     {
